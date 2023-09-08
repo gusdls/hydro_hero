@@ -2,6 +2,7 @@ import pygame
 import sys
 
 from settings import *
+from sprites.camera import CenterCameraGroup
 from sprites.player import Player
 
 class Game:
@@ -9,7 +10,7 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("The Flumen")
         self.clock = pygame.time.Clock()
-        self.visible_group = pygame.sprite.Group()
+        self.visible_group = CenterCameraGroup()
 
     def init_sprites(self):
         self.player = Player(size=(150, 150), position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
@@ -18,7 +19,7 @@ class Game:
     def draw_window(self):
         self.screen.fill(BLACK)
         self.visible_group.update()
-        self.visible_group.draw(self.screen)
+        self.visible_group.draw(self.player)
         pygame.display.update()
 
     def run(self):
