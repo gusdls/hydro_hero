@@ -1,6 +1,8 @@
 import pygame
 import glob
 
+from settings import *
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, size, position):
         super().__init__()
@@ -23,6 +25,9 @@ class Player(pygame.sprite.Sprite):
 
         self.direction = pygame.math.Vector2()
         self.speed = 10
+        self.jump_speed = -12
+        self.gravity = 0.8
+        self.on_ground = False
         
     def import_assets(self, status, size):
         files = glob.glob(f"assets/bandit/{status}*.png")
@@ -59,11 +64,27 @@ class Player(pygame.sprite.Sprite):
         else:
             self.direction.x = 0
 
+        if keys[pygame.K_SPACE] and self.on_ground:
+            self.jump()
+
     def move(self):
         self.rect.x += self.direction.x * self.speed
+
+    def apply_gravity(self):
+        self.direction.y += self.gravity
+        self.rect.y += self.direction.y
+
+        if self.rect.bottom > SCREEN_HEIGHT:
+            self.rect.bottom = SCREEN_HEIGHT
+            self.on_ground = True
+
+    def jump(self):
+        self.direction.y = self.jump_speed
+        self.on_ground = False
 
     def update(self):
         self.input()
         self.get_status()
         self.animate()
+        self.apply_gravity()
         self.move()
