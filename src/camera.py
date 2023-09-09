@@ -1,22 +1,10 @@
 import pygame
 
-class CameraGroup(pygame.sprite.Group):
+class CenterCameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
         self.screen = pygame.display.get_surface()
         self.offset = pygame.math.Vector2()
-
-    def get_view(self, target):
-        pass
-
-    def draw(self, player):
-        self.get_view(player)
-        for sprite in self.sprites():
-            self.screen.blit(sprite.image, sprite.rect.topleft - self.offset)
-
-class CenterCameraGroup(CameraGroup):
-    def __init__(self):
-        super().__init__()
         self.half_w = self.screen.get_width() // 2
         self.half_h = self.screen.get_height() // 2
 
@@ -24,10 +12,17 @@ class CenterCameraGroup(CameraGroup):
         self.offset.x = target.rect.centerx - self.half_w
         self.offset.y = target.rect.centery - self.half_h
 
-class BoxCameraGroup(CameraGroup):
-    def __init__(self):
+    def draw(self, player):
+        self.get_view(player)
+        for sprite in self.sprites():
+            self.screen.blit(sprite.image, sprite.rect.topleft - self.offset)
+
+class BoxCameraGroup(pygame.sprite.Group):
+    def __init__(self, camera_border={'left': 200, 'right': 200, 'top': 100, 'bottom': 100}):
         super().__init__()
-        self.camera_border = {'left': 200, 'right': 200, 'top': 100, 'bottom': 100}
+        self.screen = pygame.display.get_surface()
+        self.offset = pygame.math.Vector2()
+        self.camera_border = camera_border
         self.update_box_rect()
 
     def update_box_rect(self):
@@ -50,3 +45,8 @@ class BoxCameraGroup(CameraGroup):
 
         self.offset.x = self.box_rect.left - self.camera_border['left']
         self.offset.y = self.box_rect.top - self.camera_border['top']
+
+    def draw(self, player):
+        self.get_view(player)
+        for sprite in self.sprites():
+            self.screen.blit(sprite.image, sprite.rect.topleft - self.offset)
