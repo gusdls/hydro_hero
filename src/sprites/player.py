@@ -6,19 +6,15 @@ from settings import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, size, position):
         super().__init__()
-
-        # Constant
         ANIMATIONS = ['idle', 'run', 'attack']
         ANIMATION_TIMES = [2000, 1000, 1000]
         
-        # Initialization
         self.animations = {}
         self.animation_times = {}
         for i, status in enumerate(ANIMATIONS):
             self.import_assets(status, size)
             self.animation_times[status] = ANIMATION_TIMES[i]
 
-        # Animation
         self.frame_index = 0
         self.status = 'idle'
         self.update_time = pygame.time.get_ticks()
@@ -26,14 +22,12 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=position)
 
-        # Movement
         self.direction = pygame.math.Vector2()
         self.speed = 10
         self.jump_speed = -12
         self.gravity = 0.8
         self.on_ground = False
 
-        # Attacking
         self.attacking = False
         self.attack_time = None
         
