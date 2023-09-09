@@ -6,7 +6,7 @@ from settings import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, size, position):
         super().__init__()
-        ANIMATIONS = ['idle', 'run', 'attack']
+        ANIMATIONS = ["idle", "run", "attack"]
         ANIMATION_TIMES = [2000, 1000, 1000]
         
         self.animations = {}
@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
             self.animation_times[status] = ANIMATION_TIMES[i]
 
         self.frame_index = 0
-        self.status = 'idle'
+        self.status = "idle"
         self.update_time = pygame.time.get_ticks()
         self.facing_right = True
         self.image = self.animations[self.status][self.frame_index]
@@ -37,8 +37,8 @@ class Player(pygame.sprite.Sprite):
         self.animations[status] = [pygame.transform.scale(image, size) for image in images]
         
     def animate(self):
-        animation_cooldown = self.animation_times[self.status] / len(self.animations[self.status])
-        if pygame.time.get_ticks() - self.update_time >= animation_cooldown:
+        frame_time = self.animation_times[self.status] / len(self.animations[self.status])
+        if pygame.time.get_ticks() - self.update_time >= frame_time:
             self.update_time = pygame.time.get_ticks()
             self.frame_index += 1
 
@@ -50,11 +50,11 @@ class Player(pygame.sprite.Sprite):
         
     def get_status(self):
         if self.attacking:
-            self.status = 'attack'
+            self.status = "attack"
         elif self.direction.x != 0:
-            self.status = 'run'
+            self.status = "run"
         else:
-            self.status = 'idle'
+            self.status = "idle"
 
     def input(self):
         keys = pygame.key.get_pressed()
