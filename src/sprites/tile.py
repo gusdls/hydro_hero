@@ -16,4 +16,4 @@ class StaticTile(Tile):
 class WaterDrop(Tile):
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.image.fill(BLUE)
+        self.image.fill(WATER_COLOR)

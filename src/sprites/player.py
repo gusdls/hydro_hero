@@ -25,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.attacking = False
         self.attack_time = None
 
+        self.capacity = 20
         self.water = 0
         
     def import_assets(self, animation, size):
@@ -92,6 +93,10 @@ class Player(pygame.sprite.Sprite):
     def cooldowns(self):
         if self.attacking and pygame.time.get_ticks() - self.attack_time >= self.animation_times[self.status]:
             self.attacking = False
+
+    def collect_water(self):
+        if self.water < self.capacity:
+            self.water += 1
 
     def update(self):
         self.input()

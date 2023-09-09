@@ -3,13 +3,17 @@ from random import random
 
 from settings import *
 from support import *
+
 from camera import BoxCameraGroup
+from interface import UI
+
 from sprites.player import Player
 from sprites.tile import StaticTile, WaterDrop
 
 class GameManager:
     def __init__(self):
         self.visible_group = BoxCameraGroup()
+        self.interface = UI()
 
         terrain_layout = import_csv_layout("layouts/ground.csv")
         terrain_group = self.create_tile_group(terrain_layout, StaticTile)
@@ -33,10 +37,11 @@ class GameManager:
     def collision_items(self):
         for sprite in self.water_group.sprites():
             if sprite.rect.colliderect(self.player.rect):
-                self.player.water += 1
+                self.player.collect_water()
                 sprite.kill()
     
     def run(self):
         self.collision_items()
         self.visible_group.update()
         self.visible_group.draw(self.player)
+        self.interface.display(self.player)
