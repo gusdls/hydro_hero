@@ -1,19 +1,16 @@
 import pygame
-import glob
+import os
 
 from settings import *
+from support import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, size, position):
         super().__init__()
-        ANIMATIONS = ["idle", "run", "attack"]
-        ANIMATION_TIMES = [2000, 1000, 1000]
-        
-        self.animations = {}
-        self.animation_times = {}
-        for i, status in enumerate(ANIMATIONS):
-            self.import_assets(status, size)
-            self.animation_times[status] = ANIMATION_TIMES[i]
+        self.animations = {'idle': [], 'run': [], 'attack': []}
+        self.animation_times = {'idle': 2000, 'run': 1000, 'attack': 1000}
+        for animation in self.animations.keys():
+            self.import_assets(animation, size)
 
         self.frame_index = 0
         self.status = "idle"
@@ -28,10 +25,11 @@ class Player(pygame.sprite.Sprite):
         self.attacking = False
         self.attack_time = None
         
-    def import_assets(self, status, size):
-        files = glob.glob(f"assets/bandit/{status}*.png")
-        images = [pygame.image.load(file).convert_alpha() for file in files]
-        self.animations[status] = [pygame.transform.scale(image, size) for image in images]
+    def import_assets(self, animation, size):
+        path = os.path.join("assets", "bandit")
+        images = import_folder(path, animation)
+        for image in images:
+            self.animations[animation].append(pygame.transform.scale(image, size))
         
     def animate(self):
         frame_time = self.animation_times[self.status] / len(self.animations[self.status])
@@ -87,6 +85,7 @@ class Player(pygame.sprite.Sprite):
         self.attack_time = pygame.time.get_ticks()
         self.frame_index = 0
         self.direction.x = 0
+        self.direction.y = 0
 
     def cooldowns(self):
         if self.attacking and pygame.time.get_ticks() - self.attack_time >= self.animation_times[self.status]:
