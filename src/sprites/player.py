@@ -74,7 +74,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.direction.y = 0
 
-            if keys[pygame.K_f]:
+            if keys[pygame.K_SPACE]:
                 self.attack()
 
     def move(self):
