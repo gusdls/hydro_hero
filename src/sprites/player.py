@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
             self.import_assets(animation, size)
 
         self.frame_index = 0
-        self.status = "idle"
+        self.status = 'idle'
         self.update_time = pygame.time.get_ticks()
         self.facing_right = True
         self.image = self.animations[self.status][self.frame_index]
@@ -29,7 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.water = 0
         
     def import_assets(self, animation, size):
-        path = os.path.join("assets", "bandit")
+        path = os.path.join('assets', 'bandit')
         images = import_folder(path, animation)
         for image in images:
             self.animations[animation].append(pygame.transform.scale(image, size))
@@ -48,11 +48,11 @@ class Player(pygame.sprite.Sprite):
         
     def get_status(self):
         if self.attacking:
-            self.status = "attack"
+            self.status = 'attack'
         elif self.direction.magnitude() != 0:
-            self.status = "run"
+            self.status = 'run'
         else:
-            self.status = "idle"
+            self.status = 'idle'
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -87,8 +87,7 @@ class Player(pygame.sprite.Sprite):
         self.attacking = True
         self.attack_time = pygame.time.get_ticks()
         self.frame_index = 0
-        self.direction.x = 0
-        self.direction.y = 0
+        self.direction = pygame.math.Vector2()
 
     def cooldowns(self):
         if self.attacking and pygame.time.get_ticks() - self.attack_time >= self.animation_times[self.status]:
