@@ -2,7 +2,7 @@ import pygame
 import sys
 
 from settings import *
-from manager import GameManager
+from world import GameWorld
 
 class Game:
     def __init__(self):
@@ -10,7 +10,7 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("The Flumen")
         self.clock = pygame.time.Clock()
-        self.manager = GameManager()
+        self.world = GameWorld()
         
     def run(self):
         while True:
@@ -26,7 +26,7 @@ class Game:
                         sys.exit()
 
             self.screen.fill(SKY)
-            self.manager.run()
+            self.world.run()
             pygame.display.update()
 
 if __name__ == "__main__":

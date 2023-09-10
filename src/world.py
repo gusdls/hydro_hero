@@ -6,7 +6,7 @@ from support import *
 from interface import UI
 from sprites import *
 
-class GameManager:
+class GameWorld:
     def __init__(self):
         self.screen = pygame.display.get_surface()
         self.visible_group = CenterCameraGroup()
