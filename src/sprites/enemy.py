@@ -22,6 +22,10 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(topleft=(x, y))
 
+        self.power = 1
+        self.max_health = 3
+        self.health = self.max_health
+
     def import_assets(self, animation, size):
         path = os.path.join("assets", self.name, animation)
         images = import_folder(path)
@@ -56,3 +60,15 @@ class Enemy(pygame.sprite.Sprite):
         self.get_status()
         self.animate()
         self.move(self.speed)
+
+class Bear(Enemy):
+    def __init__(self, x, y):
+        super().__init__("bear", x, y, size=(TILESIZE * 4, TILESIZE * 4))
+
+class Beetle(Enemy):
+    def __init__(self, x, y):
+        super().__init__("beetle", x, y, size=(TILESIZE * 3, TILESIZE * 3))
+
+class Vulture(Enemy):
+    def __init__(self, x, y):
+        super().__init__("vulture", x, y, size=(TILESIZE * 3, TILESIZE * 3))

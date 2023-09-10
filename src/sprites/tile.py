@@ -14,7 +14,7 @@ class TerrainTile(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect(bottomleft=(x, y))
 
-class WaterDrop(pygame.sprite.Sprite):
+class Waterdrop(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.image = pygame.Surface((TILESIZE, TILESIZE))

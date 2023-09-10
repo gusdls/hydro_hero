@@ -1,5 +1,6 @@
 import pygame
 import os
+import math
 
 from settings import *
 from support import *
@@ -29,8 +30,16 @@ class Player(pygame.sprite.Sprite):
         self.attacking = False
         self.attack_time = None
 
-        self.capacity = 30
-        self.water = 0
+        self.water_capacity = 30
+        self.water_amount = 0
+
+        self.power = 1
+        self.max_health = 20
+        self.health = self.max_health
+
+        self.vulnerable = True
+        self.hurt_time = None
+        self.invulnerability_duration = 2000
         
     def import_assets(self, animation, size):
         path = os.path.join("assets", "bandit", animation)
@@ -49,6 +58,7 @@ class Player(pygame.sprite.Sprite):
 
         self.image = self.animations[self.status][self.frame_index]
         self.image = pygame.transform.flip(self.image, self.facing_right, False)
+        self.image.set_alpha(255 if math.sin(pygame.time.get_ticks()) >= 0 or self.vulnerable else 0)
         
     def get_status(self):
         if self.attacking:
@@ -96,14 +106,26 @@ class Player(pygame.sprite.Sprite):
         self.frame_index = 0
         self.direction = pygame.math.Vector2()
 
+    def hurt(self, damage):
+        if self.vulnerable:
+            self.health -= damage
+            self.vulnerable = False
+            self.hurt_time = pygame.time.get_ticks()
+
     def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
         if self.attacking:
-            if pygame.time.get_ticks() - self.attack_time >= self.animation_duration[self.status]:
+            if current_time - self.attack_time >= self.animation_duration[self.status]:
                 self.attacking = False
 
+        if not self.vulnerable:
+            if current_time - self.hurt_time >= self.invulnerability_duration:
+                self.vulnerable = True
+
     def collect_water(self):
-        if self.water < self.capacity:
-            self.water += 1
+        if self.water_amount < self.water_capacity:
+            self.water_amount += 1
 
     def update(self):
         self.input()
