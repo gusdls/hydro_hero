@@ -17,7 +17,7 @@ class GameManager:
         ground_layout = import_csv_layout("layouts/ground.csv")
         self.ground_group = self.create_tile_group(ground_layout, "ground")
 
-        self.player = Player(size=(120, 120), position=(0, SCREEN_HEIGHT))
+        self.player = Player(0, 968)
         self.visible_group.add(self.player)
 
         self.interface = UI()
@@ -49,21 +49,21 @@ class GameManager:
     def horizontal_collision(self):
         self.player.move()
         for sprite in self.ground_group.sprites():
-            if sprite.rect.colliderect(self.player):
+            if sprite.rect.colliderect(self.player.hitbox):
                 if self.player.direction.x < 0:
-                    self.player.rect.left = sprite.rect.right
+                    self.player.hitbox.left = sprite.rect.right
                 elif self.player.direction.x > 0:
-                    self.player.rect.right = sprite.rect.left
+                    self.player.hitbox.right = sprite.rect.left
     
     def vertical_collision(self):
         self.player.apply_gravity()
         for sprite in self.ground_group.sprites():
-            if sprite.rect.colliderect(self.player):
+            if sprite.rect.colliderect(self.player.hitbox):
                 if self.player.direction.y < 0:
-                    self.player.rect.top = sprite.rect.bottom
+                    self.player.hitbox.top = sprite.rect.bottom
                     self.player.direction.y = 0
                 elif self.player.direction.y > 0:
-                    self.player.rect.bottom = sprite.rect.top
+                    self.player.hitbox.bottom = sprite.rect.top
                     self.player.direction.y = 0
                     self.player.on_ground = True
 

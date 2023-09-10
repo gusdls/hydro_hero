@@ -3,22 +3,22 @@ import os
 
 from settings import *
 from support import *
-from debug import debug
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, size, position):
+    def __init__(self, x, y):
         super().__init__()
         self.animations = {'idle': [], 'run': [], 'attack': []}
         self.animation_times = {'idle': 2000, 'run': 1000, 'attack': 1000}
         for animation in self.animations.keys():
-            self.import_assets(animation, size)
+            self.import_assets(animation, size=(120, 120))
 
         self.frame_index = 0
         self.status = 'idle'
         self.update_time = pygame.time.get_ticks()
         self.facing_right = True
         self.image = self.animations[self.status][self.frame_index]
-        self.rect = self.image.get_rect(topleft=position)
+        self.rect = self.image.get_rect(topleft=(x, y))
+        self.hitbox = self.rect.inflate(-70, 0)
 
         self.direction = pygame.math.Vector2()
         self.speed = 10
@@ -78,11 +78,13 @@ class Player(pygame.sprite.Sprite):
                 self.attack()
 
     def move(self):
-        self.rect.x += self.direction.x * self.speed
+        self.hitbox.x += self.direction.x * self.speed
+        self.rect.center = self.hitbox.center
 
     def apply_gravity(self):
         self.direction.y += self.gravity
-        self.rect.y += self.direction.y
+        self.hitbox.y += self.direction.y
+        self.rect.center = self.hitbox.center
 
     def jump(self):
         self.direction.y = self.jump_speed
@@ -103,8 +105,6 @@ class Player(pygame.sprite.Sprite):
             self.water += 1
 
     def update(self):
-        debug(str(self.rect.center))
-
         self.input()
         self.cooldowns()
         self.get_status()

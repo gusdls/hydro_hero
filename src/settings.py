@@ -8,6 +8,7 @@ FPS = 60
 # Basic Colors
 BLACK = "#000000"
 WHITE = "#FFFFFF"
+RED = "#FF0000"
 BLUE = "#0000FF"
 SKY = "#8AE5FF"
 
