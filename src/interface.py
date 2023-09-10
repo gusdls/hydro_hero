@@ -18,4 +18,4 @@ class UI:
         pygame.draw.rect(self.screen, BORDER_COLOR, rect, 3)
 
     def display(self, player):
-        self.show_status_bar(current=player.water, maximum=player.capacity, rect=self.water_bar, color=BLUE)
+        self.show_status_bar(current=player.water, maximum=player.capacity, rect=self.water_bar, color=WATER_COLOR)
