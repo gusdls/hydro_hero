@@ -3,6 +3,7 @@ import os
 
 from settings import *
 from support import *
+from debug import debug
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, size, position):
@@ -103,6 +104,8 @@ class Player(pygame.sprite.Sprite):
             self.water += 1
 
     def update(self):
+        debug(str(self.rect.center))
+
         self.input()
         self.cooldowns()
         self.get_status()
