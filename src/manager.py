@@ -3,6 +3,7 @@ import os
 
 from settings import *
 from support import *
+from interface import UI
 from sprites import *
 
 class GameManager:
@@ -16,8 +17,10 @@ class GameManager:
         ground_layout = import_csv_layout("layouts/ground.csv")
         self.ground_group = self.create_tile_group(ground_layout, "ground")
 
-        self.player = Player(size=(150, 150), position=(0, SCREEN_HEIGHT))
+        self.player = Player(size=(120, 120), position=(0, SCREEN_HEIGHT))
         self.visible_group.add(self.player)
+
+        self.interface = UI()
 
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
@@ -69,3 +72,4 @@ class GameManager:
         self.vertical_collision()
         self.visible_group.update()
         self.visible_group.draw(self.player)
+        self.interface.display(self.player)
