@@ -16,7 +16,7 @@ def import_folder(path):
             images.append(pygame.image.load(location).convert_alpha())
     
     return images
-    
+
 def import_cut_graphics(path):
     target = pygame.image.load(path).convert_alpha()
     width, height = target.get_size()

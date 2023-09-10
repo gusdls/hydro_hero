@@ -20,7 +20,10 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=position)
 
         self.direction = pygame.math.Vector2()
-        self.speed = 7
+        self.speed = 10
+        self.jump_speed = -12
+        self.gravity = 0.8
+        self.on_ground = False
 
         self.attacking = False
         self.attack_time = None
@@ -49,7 +52,7 @@ class Player(pygame.sprite.Sprite):
     def get_status(self):
         if self.attacking:
             self.status = 'attack'
-        elif self.direction.magnitude() != 0:
+        elif self.direction.x != 0:
             self.status = 'run'
         else:
             self.status = 'idle'
@@ -67,21 +70,26 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.direction.x = 0
 
-            if keys[pygame.K_w]:
-                self.direction.y = -1
-            elif keys[pygame.K_s]:
-                self.direction.y = 1
-            else:
-                self.direction.y = 0
+            if keys[pygame.K_SPACE] and self.on_ground:
+                self.jump()
 
             if keys[pygame.K_SPACE]:
                 self.attack()
 
     def move(self):
-        if self.direction.magnitude() != 0:
-            self.direction = self.direction.normalize()
+        self.rect.x += self.direction.x * self.speed
 
-        self.rect.center += self.direction * self.speed
+    def apply_gravity(self):
+        self.direction.y += self.gravity
+        self.rect.y += self.direction.y
+
+        if self.rect.bottom > SCREEN_HEIGHT:
+            self.rect.bottom = SCREEN_HEIGHT
+            self.on_ground = True
+
+    def jump(self):
+        self.direction.y = self.jump_speed
+        self.on_ground = False
 
     def attack(self):
         self.attacking = True
@@ -102,4 +110,5 @@ class Player(pygame.sprite.Sprite):
         self.cooldowns()
         self.get_status()
         self.animate()
+        self.apply_gravity()
         self.move()

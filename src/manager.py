@@ -4,7 +4,7 @@ from random import random
 from settings import *
 from support import *
 
-from camera import CenterCameraGroup
+from sprites.camera import CenterCameraGroup
 from interface import UI
 
 from sprites.player import Player
