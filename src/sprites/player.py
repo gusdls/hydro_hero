@@ -21,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.hitbox = self.rect.inflate(-70, 0)
 
         self.direction = pygame.math.Vector2()
-        self.speed = 10
+        self.speed = 8
         self.jump_speed = -15
         self.gravity = 0.8
         self.on_ground = False
