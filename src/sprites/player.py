@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.facing_right = True
         self.image = self.animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(topleft=(x, y))
-        self.hitbox = self.rect.inflate(-70, 0)
+        self.hitbox = self.rect.inflate(-70, -20)
 
         self.direction = pygame.math.Vector2()
         self.speed = 8
@@ -79,12 +79,12 @@ class Player(pygame.sprite.Sprite):
 
     def move(self):
         self.hitbox.x += self.direction.x * self.speed
-        self.rect.center = self.hitbox.center
+        self.rect.midbottom = self.hitbox.midbottom
 
     def apply_gravity(self):
         self.direction.y += self.gravity
         self.hitbox.y += self.direction.y
-        self.rect.center = self.hitbox.center
+        self.rect.midbottom = self.hitbox.midbottom
 
     def jump(self):
         self.direction.y = self.jump_speed
