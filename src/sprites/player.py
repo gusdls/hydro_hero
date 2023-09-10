@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.animations = {'idle': [], 'run': [], 'attack': []}
-        self.animation_times = {'idle': 2000, 'run': 1000, 'attack': 1000}
+        self.animation_duration = {'idle': 2000, 'run': 1000, 'attack': 1000}
         for animation in self.animations.keys():
             self.import_assets(animation, size=(120, 120))
 
@@ -33,14 +33,14 @@ class Player(pygame.sprite.Sprite):
         self.water = 0
         
     def import_assets(self, animation, size):
-        path = os.path.join('assets', 'bandit', animation)
+        path = os.path.join("assets", "bandit", animation)
         images = import_folder(path)
         for image in images:
             self.animations[animation].append(pygame.transform.scale(image, size))
         
     def animate(self):
-        frame_time = self.animation_times[self.status] / len(self.animations[self.status])
-        if pygame.time.get_ticks() - self.update_time >= frame_time:
+        duration = self.animation_duration[self.status] / len(self.animations[self.status])
+        if pygame.time.get_ticks() - self.update_time >= duration:
             self.update_time = pygame.time.get_ticks()
             self.frame_index += 1
 
@@ -97,8 +97,9 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
 
     def cooldowns(self):
-        if self.attacking and pygame.time.get_ticks() - self.attack_time >= self.animation_times[self.status]:
-            self.attacking = False
+        if self.attacking:
+            if pygame.time.get_ticks() - self.attack_time >= self.animation_duration[self.status]:
+                self.attacking = False
 
     def collect_water(self):
         if self.water < self.capacity:
