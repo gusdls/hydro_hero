@@ -22,7 +22,7 @@ class Player(pygame.sprite.Sprite):
 
         self.direction = pygame.math.Vector2()
         self.speed = 10
-        self.jump_speed = -12
+        self.jump_speed = -15
         self.gravity = 0.8
         self.on_ground = False
 
@@ -71,7 +71,7 @@ class Player(pygame.sprite.Sprite):
             if keys[pygame.K_SPACE] and self.on_ground:
                 self.jump()
 
-            if keys[pygame.K_SPACE]:
+            if keys[pygame.K_LSHIFT]:
                 self.attack()
 
     def move(self):
@@ -80,10 +80,6 @@ class Player(pygame.sprite.Sprite):
     def apply_gravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
-
-        if self.rect.bottom > SCREEN_HEIGHT:
-            self.rect.bottom = SCREEN_HEIGHT
-            self.on_ground = True
 
     def jump(self):
         self.direction.y = self.jump_speed
@@ -110,5 +106,3 @@ class Player(pygame.sprite.Sprite):
         self.cooldowns()
         self.get_status()
         self.animate()
-        self.apply_gravity()
-        self.move()

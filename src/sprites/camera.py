@@ -10,7 +10,7 @@ class CenterCameraGroup(pygame.sprite.Group):
 
     def view(self, target):
         self.offset.x = target.rect.centerx - self.half_w
-        # self.offset.y = target.rect.centery - self.half_h
+        self.offset.y = target.rect.centery - self.half_h
 
     def draw(self, player):
         self.view(player)
