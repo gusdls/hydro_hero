@@ -8,11 +8,11 @@ class CenterCameraGroup(pygame.sprite.Group):
         self.half_w = self.screen.get_width() // 2
         self.half_h = self.screen.get_height() // 2
 
-    def view(self, target):
+    def get_view(self, target):
         self.offset.x = target.rect.centerx - self.half_w
-        # self.offset.y = target.rect.centery - self.half_h
+        self.offset.y = target.rect.centery - self.half_h
 
     def draw(self, player):
-        self.view(player)
+        self.get_view(player)
         for sprite in self.sprites():
             self.screen.blit(sprite.image, sprite.rect.topleft - self.offset)

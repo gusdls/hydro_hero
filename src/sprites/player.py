@@ -3,6 +3,7 @@ import os
 
 from settings import *
 from support import *
+from debug import debug
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, size, position):
@@ -21,14 +22,14 @@ class Player(pygame.sprite.Sprite):
 
         self.direction = pygame.math.Vector2()
         self.speed = 10
-        self.jump_speed = -12
+        self.jump_speed = -15
         self.gravity = 0.8
         self.on_ground = False
 
         self.attacking = False
         self.attack_time = None
 
-        self.capacity = 20
+        self.capacity = 30
         self.water = 0
         
     def import_assets(self, animation, size):
@@ -73,7 +74,7 @@ class Player(pygame.sprite.Sprite):
             if keys[pygame.K_SPACE] and self.on_ground:
                 self.jump()
 
-            if keys[pygame.K_SPACE]:
+            if keys[pygame.K_LSHIFT]:
                 self.attack()
 
     def move(self):
@@ -82,10 +83,6 @@ class Player(pygame.sprite.Sprite):
     def apply_gravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
-
-        if self.rect.bottom > SCREEN_HEIGHT:
-            self.rect.bottom = SCREEN_HEIGHT
-            self.on_ground = True
 
     def jump(self):
         self.direction.y = self.jump_speed
@@ -106,9 +103,9 @@ class Player(pygame.sprite.Sprite):
             self.water += 1
 
     def update(self):
+        debug(str(self.rect.center))
+
         self.input()
         self.cooldowns()
         self.get_status()
         self.animate()
-        self.apply_gravity()
-        self.move()

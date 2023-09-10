@@ -1,74 +1,75 @@
 import pygame
-from random import random
+import os
 
 from settings import *
 from support import *
-
-from sprites.camera import CenterCameraGroup
 from interface import UI
-
-from sprites.player import Player
-from sprites.tile import StaticTile, WaterDrop
-from sprites.enemy import Enemy
+from sprites import *
 
 class GameManager:
     def __init__(self):
+        self.screen = pygame.display.get_surface()
         self.visible_group = CenterCameraGroup()
+
+        terrain_layout = import_csv_layout("layouts/terrain.csv")
+        self.create_tile_group(terrain_layout, "terrain")
+
+        ground_layout = import_csv_layout("layouts/ground.csv")
+        self.ground_group = self.create_tile_group(ground_layout, "ground")
+
+        self.player = Player(size=(120, 120), position=(0, SCREEN_HEIGHT))
+        self.visible_group.add(self.player)
+
         self.interface = UI()
 
-        terrain_layout = import_csv_layout("layouts/ground.csv")
-        self.create_tile_group(terrain_layout, 'terrain')
-        self.water_group = self.create_tile_group(terrain_layout, 'water')
-
-        objects_layout = import_csv_layout("layouts/objects.csv")
-        self.create_tile_group(objects_layout, 'objects')
-    
     def create_tile_group(self, layout, type):
         sprite_group = pygame.sprite.Group()
+        ground_tiles = import_cut_graphics("assets/tilemap/ground.png")
+        terrain_tiles = import_folder(os.path.join("assets", "terrain"), lambda file: int(os.path.splitext(file)[0]))
 
         for row_idx, row in enumerate(layout):
-            for col_idx, value in enumerate(row):
-                if value == '-1':
+            for col_idx, val in enumerate(row):
+                if val == '-1':
                     continue
 
-                x = col_idx * TILE_SIZE
-                y = row_idx * TILE_SIZE
-
-                if type == 'terrain':
-                    sprite = StaticTile(x, y)
+                x = col_idx * TILESIZE
+                y = row_idx * TILESIZE
+                    
+                if type == "ground":
+                    sprite = StaticTile(ground_tiles[int(val)], x, y)
                     self.visible_group.add(sprite)
                     sprite_group.add(sprite)
-                elif type == 'water':
-                    if random() < 0.01:
-                        sprite = WaterDrop(x, y)
-                        self.visible_group.add(sprite)
-                        sprite_group.add(sprite)
-                elif type == 'objects':
-                    if value == '0':
-                        self.player = Player(size=(120, 120), position=(x, y))
-                        self.visible_group.add(self.player)
-                    else:
-                        sprite = Enemy(
-                            position=(x, y),
-                            name=enemies_data[value]['name'],
-                            size=enemies_data[value]['size'],
-                            speed=enemies_data[value]['speed'],
-                            notice_radius=enemies_data[value]['notice_radius']
-                        )
-                        self.visible_group.add(sprite)
-                        sprite_group.add(sprite)
-        
+                elif type == "terrain":
+                    sprite = TerrainTile(terrain_tiles[int(val)], x, y + TILESIZE)
+                    self.visible_group.add(sprite)
+                    sprite_group.add(sprite)
+
         return sprite_group
+
+    def horizontal_collision(self):
+        self.player.move()
+        for sprite in self.ground_group.sprites():
+            if sprite.rect.colliderect(self.player):
+                if self.player.direction.x < 0:
+                    self.player.rect.left = sprite.rect.right
+                elif self.player.direction.x > 0:
+                    self.player.rect.right = sprite.rect.left
     
-    def collision_items(self):
-        for sprite in self.water_group.sprites():
-            if sprite.rect.colliderect(self.player.rect):
-                self.player.collect_water()
-                sprite.kill()
-    
+    def vertical_collision(self):
+        self.player.apply_gravity()
+        for sprite in self.ground_group.sprites():
+            if sprite.rect.colliderect(self.player):
+                if self.player.direction.y < 0:
+                    self.player.rect.top = sprite.rect.bottom
+                    self.player.direction.y = 0
+                elif self.player.direction.y > 0:
+                    self.player.rect.bottom = sprite.rect.top
+                    self.player.direction.y = 0
+                    self.player.on_ground = True
+
     def run(self):
-        self.collision_items()
+        self.horizontal_collision()
+        self.vertical_collision()
         self.visible_group.update()
-        self.visible_group.enemy_update(self.player)
         self.visible_group.draw(self.player)
         self.interface.display(self.player)
