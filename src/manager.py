@@ -29,18 +29,18 @@ class GameManager:
 
         for row_idx, row in enumerate(layout):
             for col_idx, val in enumerate(row):
-                if val == '-1':
+                if val == -1:
                     continue
 
                 x = col_idx * TILESIZE
                 y = row_idx * TILESIZE
                     
                 if type == "ground":
-                    sprite = StaticTile(ground_tiles[int(val)], x, y)
+                    sprite = StaticTile(ground_tiles[val], x, y)
                     self.visible_group.add(sprite)
                     sprite_group.add(sprite)
                 elif type == "terrain":
-                    sprite = TerrainTile(terrain_tiles[int(val)], x, y + TILESIZE)
+                    sprite = TerrainTile(terrain_tiles[val], x, y + TILESIZE)
                     self.visible_group.add(sprite)
                     sprite_group.add(sprite)
 

@@ -6,7 +6,7 @@ from settings import *
 
 def import_csv_layout(path):
     with open(path) as file:
-        return [row for row in reader(file, delimiter=',')]
+        return [map(int, row) for row in reader(file, delimiter=',')]
     
 def import_folder(path, priority=lambda file: file):
     images = []
