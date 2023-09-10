@@ -1,5 +1,7 @@
 import pygame
 
+from sprites.enemy import Enemy
+
 class CenterCameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
@@ -16,6 +18,11 @@ class CenterCameraGroup(pygame.sprite.Group):
         self.get_view(player)
         for sprite in self.sprites():
             self.screen.blit(sprite.image, sprite.rect.topleft - self.offset)
+
+    def enemy_update(self, player):
+        for sprite in self.sprites():
+            if isinstance(sprite, Enemy):
+                sprite.custom_update(player)
 
 class BoxCameraGroup(pygame.sprite.Group):
     def __init__(self, camera_border={'left': 200, 'right': 200, 'top': 100, 'bottom': 100}):

@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
         self.facing_right = True
         self.image = self.animations[self.status][self.frame_index]
-        self.rect = self.image.get_rect(center=position)
+        self.rect = self.image.get_rect(topleft=position)
 
         self.direction = pygame.math.Vector2()
         self.speed = 7
