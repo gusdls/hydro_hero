@@ -19,7 +19,7 @@ class GameManager:
         terrain_group = self.create_tile_group(terrain_layout, StaticTile)
         self.water_group = self.create_tile_group(terrain_layout, WaterDrop, lambda: random() < 0.01)
 
-        self.player = Player(size=(150, 150), position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+        self.player = Player(size=(120, 120), position=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
         self.visible_group.add(self.player)
     
     def create_tile_group(self, layout, Tile, check=lambda: True):

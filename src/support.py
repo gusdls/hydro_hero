@@ -8,13 +8,12 @@ def import_csv_layout(path):
     with open(path) as file:
         return [row for row in reader(file, delimiter=',')]
     
-def import_folder(path, prefix=""):
+def import_folder(path):
     images = []
     for root, dirs, files in os.walk(path):
         for file in files:
-            if file.startswith(prefix):
-                location = os.path.join(root, file)
-                images.append(pygame.image.load(location).convert_alpha())
+            location = os.path.join(root, file)
+            images.append(pygame.image.load(location).convert_alpha())
     
     return images
     

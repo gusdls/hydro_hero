@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=position)
 
         self.direction = pygame.math.Vector2()
-        self.speed = 10
+        self.speed = 7
 
         self.attacking = False
         self.attack_time = None
@@ -29,8 +29,8 @@ class Player(pygame.sprite.Sprite):
         self.water = 0
         
     def import_assets(self, animation, size):
-        path = os.path.join('assets', 'bandit')
-        images = import_folder(path, animation)
+        path = os.path.join('assets', 'bandit', animation)
+        images = import_folder(path)
         for image in images:
             self.animations[animation].append(pygame.transform.scale(image, size))
         
