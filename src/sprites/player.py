@@ -27,9 +27,6 @@ class Player(pygame.sprite.Sprite):
 
         self.attacking = False
         self.attack_time = None
-
-        self.capacity = 20
-        self.water = 0
         
     def import_assets(self, animation, size):
         path = os.path.join('assets', 'bandit', animation)
