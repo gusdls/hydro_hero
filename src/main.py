@@ -8,7 +8,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        pygame.display.set_caption("The Flumen")
+        pygame.display.set_caption("Hydro Hero")
         self.clock = pygame.time.Clock()
         self.world = GameWorld()
         
