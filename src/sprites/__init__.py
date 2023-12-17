@@ -1,4 +1,4 @@
-from .camera import *
-from .player import *
-from .tile import *
-from .enemy import *
+from .camera import CenterCameraGroup
+from .player import Player
+from .tile import StaticTile
+from .enemy import Bear, Beetle, Vulture
