@@ -4,7 +4,10 @@ import os
 from settings import *
 from support import *
 from interface import UI
-from sprites import *
+from sprites.camera import CenterCameraGroup
+from sprites.player import Player
+from sprites.tile import TerrainTile, StaticTile, Waterdrop
+from sprites.enemy import Bear, Beetle, Vulture
 
 class GameWorld:
     def __init__(self):
